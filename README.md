@@ -4,7 +4,9 @@ The API for OSRS Tracker.
 
 ## Endpoints
 
-- [test](#player)
+- [Player](#player)
+  - [Get player](#get-player)
+  - [Insert player](#insert-player-deprecated)
 
 ### Player
 
