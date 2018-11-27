@@ -17,6 +17,9 @@ The API for OSRS Tracker.
   - [Get news posts](#get-news-posts)
   - [Upvote](#upvote)
   - [Downvote](#downvote)
+- [Player](#player)
+  - [Insert initial XP datapoint (deprecated)](#insert-initial-xp-datapoint-deprecated)
+  - [Get XP datapoints for player](#get-xp-datapoints-for-player)
 
 ### Icons
 
@@ -128,7 +131,7 @@ NewsPost: {
 
 #### Get news posts
 
-Endpoint: `GET /news?uuid=[string]&offset`
+Endpoint: `GET /news?uuid=[string]&offset=[number]`
 
 The `uuid` is used to check if the user has up or downvoted posts.
 
@@ -174,4 +177,36 @@ Expected payload:
   newsId: number,
   uuid: string
 }
+```
+
+### XP
+
+#### Insert initial XP datapoint (deprecated)
+
+Endpoint: `POST /xp/:username/initialDatapoint`
+
+Possible status codes: `204`, `403` and `500`.
+
+Expected payload:
+```ts
+{
+  username: string,
+  xpString: string
+}
+```
+
+#### Get XP datapoints for player
+
+Endpoint: `GET /exp/:username(/:period)?offset=[number]`
+
+The `period` route parameter is optional, defaults to `7`.
+
+Possible status codes: `200`, `404` and `500`.
+
+Returns:
+```ts
+XpDatapoints: [{
+    date: Date,
+    xpString: string
+}, ...]
 ```

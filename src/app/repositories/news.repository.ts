@@ -35,7 +35,7 @@ export class NewsRepository {
                 } else if (results && results.length > 0) {
                     resolve({ statusCode: 200, newsPosts: results });
                 } else {
-                    resolve({ statusCode: 404 });
+                    resolve({ statusCode: 204 });
                 }
             });
         });
