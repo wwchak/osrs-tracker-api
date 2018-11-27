@@ -11,7 +11,7 @@ The API for OSRS Tracker.
   - [Get items](#get-items)
 - [Player](#player)
   - [Get player](#get-player)
-  - [Insert player](#insert-player-deprecated)
+  - [Insert player (deprecated)](#insert-player-deprecated)
 - [News](#news)
   - [Get news post](#get-news-post)
   - [Get news posts](#get-news-posts)
