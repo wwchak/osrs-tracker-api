@@ -7,6 +7,9 @@ The API for OSRS Tracker.
 - [Player](#player)
   - [Get player](#get-player)
   - [Insert player](#insert-player-deprecated)
+- [Items](#items)
+  - [Get item](#get-item)
+  - [Get items](#get-items)
 
 ### Player
 
@@ -29,11 +32,13 @@ player: {
 
 #### Insert player (deprecated)
 
-Endpoint: `POST /player/:username`
+Endpoint: `POST /player`
+
+Possible status codes: `201`, `204` and `500`.
 
 Expected payload:
 ```ts
-player: {
+Player: {
   username: string,
   playerType: PlayerType,
   deIroned: boolean,
@@ -41,4 +46,38 @@ player: {
 }
 ```
 
-Possible status codes: `201`, `204` and `500`.
+### Items
+
+#### Get item
+
+Endpoint: `GET /item/:id`
+
+Possible status codes: `201`, `404` and `500`.
+
+Returns:
+```ts
+Items: [{
+  id: number,
+  name: string,
+  description: string,
+  current: string,
+  today: string
+}]
+```
+
+#### Get items
+
+Endpoint: `GET /item?query=[string]`
+
+Possible status codes: `200`, `204` and `500`.
+
+Returns:
+```ts
+Items: [{
+  id: number,
+  name: string,
+  description: string,
+  current: string,
+  today: string
+}, ...]
+```
