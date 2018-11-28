@@ -42,7 +42,7 @@ export class API {
         if (res) res.sendStatus(503);
         return null;
       })
-      .then((connection: PoolConnection) => {
+      .then((connection: PoolConnection | null) => {
         if (!connection) return;
         return dbConnectionLogic(connection)
           .then(() => connection.release())

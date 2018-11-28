@@ -12,7 +12,7 @@ export class NewsRepository {
       FROM News n WHERE n.id = ?`;
 
     return new Promise(resolve => {
-      connection.query(query, [uuid, +newsId], (outerError, [result]: NewsPost[], fields) => {
+      connection.query(query, [uuid, +newsId], (outerError, [result]: NewsPost[]) => {
         if (outerError) {
           resolve({ statusCode: 500 });
         } else if (result) {
@@ -33,7 +33,7 @@ export class NewsRepository {
       FROM News n ORDER BY date DESC LIMIT 5 OFFSET ?`;
 
     return new Promise(resolve => {
-      connection.query(query, [uuid, offset || 0], (outerError, results: NewsPost[], fields) => {
+      connection.query(query, [uuid, offset || 0], (outerError, results: NewsPost[]) => {
         if (outerError) {
           resolve({ statusCode: 500 });
         } else if (results && results.length > 0) {

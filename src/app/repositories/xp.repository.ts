@@ -9,7 +9,7 @@ export class XpRepository {
       WHERE p.username = ? ORDER BY xp.date DESC LIMIT ? OFFSET ?`;
 
     return new Promise(resolve => {
-      connection.query(query, [username.toLowerCase(), period || 7, offset || 0], (outerError, results: XpDatapoint[], fields) => {
+      connection.query(query, [username.toLowerCase(), period || 7, offset || 0], (outerError, results: XpDatapoint[]) => {
         if (outerError) {
           resolve({ statusCode: 500 });
         } else if (results && results.length > 0) {
@@ -38,7 +38,7 @@ export class XpRepository {
         if (outerError) {
           resolve({ statusCode: 500 });
         } else if (results && results.length > 0 && results[0].count === 0) {
-          connection.query(insertDatapoint, [new Date(), xpString, username], (outerError, results, fields) => {
+          connection.query(insertDatapoint, [new Date(), xpString, username], (outerError, results) => {
             resolve({ statusCode: !outerError && results && results.insertId ? 204 : 500 });
           });
         } else {

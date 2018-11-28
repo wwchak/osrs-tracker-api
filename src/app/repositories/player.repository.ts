@@ -7,7 +7,7 @@ export class PlayerRepository {
   static getPlayer(username: string, connection: PoolConnection): Promise<{ statusCode: number, player?: Player }> {
     const query = 'SELECT p.*, pt.type FROM Player p JOIN PlayerType pt ON p.playerType = pt.id WHERE username = ?';
     return new Promise(resolve => {
-      connection.query(query, [username.toLowerCase()], (outerError, [result]: DbPlayer[], fields) => {
+      connection.query(query, [username.toLowerCase()], (outerError, [result]: DbPlayer[]) => {
         if (outerError) {
           resolve({ statusCode: 500 });
         } else if (result) {
@@ -19,7 +19,7 @@ export class PlayerRepository {
               deIroned: result.deIroned,
               dead: result.dead,
               lastChecked: result.lastChecked,
-            }
+            } as Player
           });
         } else {
           resolve({ statusCode: 404 });
@@ -28,9 +28,9 @@ export class PlayerRepository {
     });
   }
 
-  static getDbPlayer(username: string, connection: PoolConnection): Promise<DbPlayer> {
+  static getDbPlayer(username: string, connection: PoolConnection): Promise<DbPlayer | null> {
     return new Promise(resolve => {
-      connection.query('SELECT * FROM Player where username = ?', [username], (outerError, results: DbPlayer[], fields) => {
+      connection.query('SELECT * FROM Player where username = ?', [username], (outerError, results: DbPlayer[]) => {
         resolve(results && results.length > 0 ? results[0] : null);
       });
     });
@@ -38,7 +38,7 @@ export class PlayerRepository {
 
   static getPlayers(connection: PoolConnection): Promise<{ statusCode: number, players?: DbPlayer[] }> {
     return new Promise(resolve => {
-      connection.query('SELECT p.id, p.username FROM Player p', (outerError, results: DbPlayer[], fields) => {
+      connection.query('SELECT p.id, p.username FROM Player p', (outerError, results: DbPlayer[]) => {
         if (outerError) {
           resolve({ statusCode: 500 });
         } else if (results && results.length > 0) {
