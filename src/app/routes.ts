@@ -10,22 +10,22 @@ import { PlayerRouter } from './routes/player.router';
 
 export class Routes {
 
-    static init(app: Application): void {
-        this.initIndexRoute(app);
-        
-        IconRouter.create(app);
-        ItemRouter.create(app);
-        NewsRouter.create(app);
-        PlayerRouter.create(app);
-        XpRouter.create(app);
-    }
+  static init(app: Application): void {
+    this.initIndexRoute(app);
 
-    private static initIndexRoute(app: Application): void {
-        app.get('/', (req, res, next) => {
-            res.type('text/html');
-            res.send(IndexPage(API.CONFIG.VERSION));
-            return next();
-        });
-    }
+    IconRouter.create(app);
+    ItemRouter.create(app);
+    NewsRouter.create(app);
+    PlayerRouter.create(app);
+    XpRouter.create(app);
+  }
+
+  private static initIndexRoute(app: Application): void {
+    app.get('/', (req, res, next) => {
+      res.type('text/html');
+      res.send(IndexPage(API.CONFIG.VERSION));
+      return next();
+    });
+  }
 
 }
