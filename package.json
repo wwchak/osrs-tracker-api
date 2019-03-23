@@ -1,6 +1,6 @@
 {
   "name": "osrs-tracker-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "author": "Freek Mencke",
   "homepage": "https://twitter.com/FreekMencke",
@@ -8,46 +8,44 @@
     "type": "git",
     "url": "https://github.com/osrs-tracker/osrs-tracker-cron"
   },
-  "engines": {
-    "node": ">=10.14.0",
-    "npm": ">=6.4.1"
-  },
   "scripts": {
-    "start": "webpack --config webpack.config.js --progress --env.mode=development && start http://localhost:4300 && node dist/osrs-tracker-api.js",
-    "start:prod": "webpack --config webpack.config.js --progress --env.mode=production && start http://localhost:4300 && node dist/osrs-tracker-api.js",
+    "start": "webpack --watch --config webpack.config.js --progress --env.mode=development && node dist/osrs-tracker-api.js",
+    "start:prod": "webpack --watch --config webpack.config.js --progress --env.mode=production && node dist/osrs-tracker-api.js",
     "build:prod": "webpack --config webpack.config.js --progress --env.mode=production",
     "build:ci": "webpack --config webpack.config.js --env.mode=production",
+    "build:docker": "docker build --rm -t toxsickcoder/osrs-tracker-api:dev .",
+    "deploy:docker": "sh ./scripts/deploy.sh",
     "analyse:dev": "webpack --config webpack.config.js --progress --env.mode=development --env.analyse && start dist/report.html",
     "analyse:prod": "webpack --config webpack.config.js --progress --env.mode=production --env.analyse && start dist/report.html",
     "lint": "tslint --project ."
   },
   "dependencies": {
+    "@types/compression": "0.0.36",
     "body-parser": "1.18.3",
-    "chalk": "2.4.1",
+    "compression": "^1.7.4",
     "cors": "2.8.5",
-    "cron": "1.5.0",
     "express": "4.16.4",
-    "helmet": "3.15.0",
+    "helmet": "3.16.0",
     "mysql": "2.16.0",
     "node-fetch": "2.3.0"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.0",
     "@types/cors": "2.8.4",
-    "@types/cron": "1.3.0",
-    "@types/express": "4.16.0",
-    "@types/helmet": "0.0.42",
+    "@types/express": "4.16.1",
+    "@types/helmet": "0.0.43",
     "@types/mysql": "2.15.5",
-    "@types/node": "10.12.10",
-    "@types/node-fetch": "2.1.4",
-    "clean-webpack-plugin": "1.0.0",
-    "terser-webpack-plugin": "1.1.0",
-    "ts-loader": "5.3.1",
-    "tslint": "5.11.0",
-    "tslint-eslint-rules": "5.4.0",
-    "typescript": "3.1.6",
-    "webpack": "4.26.1",
-    "webpack-bundle-analyzer": "3.0.3",
-    "webpack-cli": "3.1.2"
+    "@types/node": "^10.0.0",
+    "@types/node-fetch": "2.1.7",
+    "clean-webpack-plugin": "^2.0.1",
+    "nodemon-webpack-plugin": "^4.0.8",
+    "terser-webpack-plugin": "1.2.3",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.14.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.3.4000",
+    "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.1.0",
+    "webpack-cli": "^3.3.0"
   }
 }

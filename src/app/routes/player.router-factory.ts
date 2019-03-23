@@ -1,12 +1,12 @@
-import express from 'express';
+import { Application, Router } from 'express';
 import { API } from '../../config/api';
-import { PlayerRepository } from '../repositories/player.repository';
 import { Logger } from '../common/logger';
+import { PlayerRepository } from '../repositories/player.repository';
+import { RouterFactory } from './router.interface';
 
-export class PlayerRouter {
-
-  static create(app: express.Application): void {
-    const router = express.Router();
+export class PlayerRouter implements RouterFactory {
+  create(app: Application): void {
+    const router = Router();
 
     this.getPlayer(router);
     this.insertPlayer(router);
@@ -14,7 +14,7 @@ export class PlayerRouter {
     app.use('/player', router);
   }
 
-  private static getPlayer(router: express.Router): void {
+  private getPlayer(router: Router): void {
     router.get('/:username', (req, res) => {
       API.getDbConnection(connection =>
         PlayerRepository.getPlayer(req.params.username, connection).then(({ statusCode, player }) => {
@@ -26,7 +26,7 @@ export class PlayerRouter {
     });
   }
 
-  private static insertPlayer(router: express.Router): void {
+  private insertPlayer(router: Router): void {
     router.post('/', (req, res) => {
       API.getDbConnection(connection =>
         PlayerRepository.insertPlayer(req.body, connection).then(({ statusCode }) => {
@@ -37,5 +37,4 @@ export class PlayerRouter {
       );
     });
   }
-
 }

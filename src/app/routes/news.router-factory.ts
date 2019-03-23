@@ -1,12 +1,12 @@
-import express from 'express';
+import { Application, Router } from 'express';
 import { API } from '../../config/api';
-import { NewsRepository } from '../repositories/news.repository';
 import { Logger } from '../common/logger';
+import { NewsRepository } from '../repositories/news.repository';
+import { RouterFactory } from './router.interface';
 
-export class NewsRouter {
-
-  static create(app: express.Application): void {
-    const router = express.Router();
+export class NewsRouter implements RouterFactory {
+  create(app: Application): void {
+    const router = Router();
 
     this.getNewsPost(router);
     this.getNewsPosts(router);
@@ -16,7 +16,7 @@ export class NewsRouter {
     app.use('/news', router);
   }
 
-  private static getNewsPost(router: express.Router): void {
+  private getNewsPost(router: Router): void {
     router.get('/:id', (req, res) => {
       API.getDbConnection(connection =>
         NewsRepository.getNewsItem(req.params.id, req.query.uuid, connection).then(({ statusCode, newsPost }) => {
@@ -28,7 +28,7 @@ export class NewsRouter {
     });
   }
 
-  private static getNewsPosts(router: express.Router): void {
+  private getNewsPosts(router: Router): void {
     router.get('/', (req, res) => {
       API.getDbConnection(connection =>
         NewsRepository.getNewsItems(req.query.uuid, +req.query.offset, connection).then(({ statusCode, newsPosts }) => {
@@ -40,7 +40,7 @@ export class NewsRouter {
     });
   }
 
-  private static upvote(router: express.Router): void {
+  private upvote(router: Router): void {
     router.post('/upvote', (req, res) => {
       API.getDbConnection(connection =>
         NewsRepository.upvote(req.body.newsId, req.body.uuid, connection).then(({ statusCode }) => {
@@ -52,7 +52,7 @@ export class NewsRouter {
     });
   }
 
-  private static downvote(router: express.Router): void {
+  private downvote(router: Router): void {
     router.post('/downvote', (req, res) => {
       API.getDbConnection(connection =>
         NewsRepository.downvote(req.body.newsId, req.body.uuid, connection).then(({ statusCode }) => {
@@ -63,5 +63,4 @@ export class NewsRouter {
       );
     });
   }
-
 }

@@ -1,12 +1,12 @@
-import express from 'express';
+import { Application, Router } from 'express';
 import { API } from '../../config/api';
-import { ItemRepository } from '../repositories/item.repository';
 import { Logger } from '../common/logger';
+import { ItemRepository } from '../repositories/item.repository';
+import { RouterFactory } from './router.interface';
 
-export class ItemRouter {
-
-  static create(app: express.Application): void {
-    const router = express.Router();
+export class ItemRouter implements RouterFactory {
+  create(app: Application): void {
+    const router = Router();
 
     this.getItem(router);
     this.getItems(router);
@@ -14,7 +14,7 @@ export class ItemRouter {
     app.use('/item', router);
   }
 
-  private static getItem(router: express.Router): void {
+  private getItem(router: Router): void {
     router.get('/:id', (req, res) => {
       API.getDbConnection(connection =>
         ItemRepository.getItem(req.params.id, connection).then(({ statusCode, items }) => {
@@ -24,19 +24,17 @@ export class ItemRouter {
         })
       );
     });
-
   }
 
-  private static getItems(router: express.Router): void {
+  private getItems(router: Router): void {
     router.get('/', (req, res) => {
       API.getDbConnection(connection =>
         ItemRepository.getItems(req.query.query, connection).then(({ statusCode, items }) => {
-          Logger.log(statusCode, 'GET /item', { query: req.query.query, results: items && items.length || 0 });
+          Logger.log(statusCode, 'GET /item', { query: req.query.query, results: (items && items.length) || 0 });
           res.status(statusCode);
           res.send(items);
         })
       );
     });
   }
-
 }
