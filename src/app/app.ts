@@ -33,7 +33,7 @@ export class App {
 
   private setupMiddleware(): void {
     this._app.use(compression());
-    this._app.use(helmet());
+    this._app.use(helmet({ noCache: true }));
     this._app.use(cors());
     this._app.use(bodyParser.urlencoded({ extended: true }));
     this._app.use(bodyParser.json());
