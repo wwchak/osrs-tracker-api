@@ -26,6 +26,7 @@ export class IconRouter implements RouterFactory {
         )
         .then(iconFile => {
           res.type('image/gif');
+          res.setHeader('Cache-Control', 'public, max-age=31536000');
           res.setHeader('Content-Disposition', `inline; filename="${itemId}.gif"`);
           res.send(iconFile);
         })
