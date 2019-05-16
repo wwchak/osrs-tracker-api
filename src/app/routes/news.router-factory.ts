@@ -1,6 +1,5 @@
 import { Application, Router } from 'express';
-import { API } from '../../config/api';
-import { Logger } from '../common/logger';
+import { SqlUtils } from '../common/sql-utils';
 import { NewsRepository } from '../repositories/news.repository';
 import { RouterFactory } from './router.interface';
 
@@ -18,9 +17,8 @@ export class NewsRouter implements RouterFactory {
 
   private getNewsPost(router: Router): void {
     router.get('/:id', (req, res) => {
-      API.getDbConnection(connection =>
+      SqlUtils.getDbConnection(connection =>
         NewsRepository.getNewsItem(req.params.id, req.query.uuid, connection).then(({ statusCode, newsPost }) => {
-          Logger.log(statusCode, 'GET /news/:id', { id: req.params.id, uuid: req.query.uuid });
           res.status(statusCode);
           res.send(newsPost);
         })
@@ -30,9 +28,8 @@ export class NewsRouter implements RouterFactory {
 
   private getNewsPosts(router: Router): void {
     router.get('/', (req, res) => {
-      API.getDbConnection(connection =>
+      SqlUtils.getDbConnection(connection =>
         NewsRepository.getNewsItems(req.query.uuid, +req.query.offset, connection).then(({ statusCode, newsPosts }) => {
-          Logger.log(statusCode, 'GET /news', { uuid: req.query.uuid, offset: req.query.offset });
           res.status(statusCode);
           res.send(newsPosts);
         })
@@ -42,9 +39,8 @@ export class NewsRouter implements RouterFactory {
 
   private upvote(router: Router): void {
     router.post('/upvote', (req, res) => {
-      API.getDbConnection(connection =>
+      SqlUtils.getDbConnection(connection =>
         NewsRepository.upvote(req.body.newsId, req.body.uuid, connection).then(({ statusCode }) => {
-          Logger.log(statusCode, 'POST /news/upvote', { id: req.body.newsId, uuid: req.body.uuid });
           res.status(statusCode);
           res.send();
         })
@@ -54,9 +50,8 @@ export class NewsRouter implements RouterFactory {
 
   private downvote(router: Router): void {
     router.post('/downvote', (req, res) => {
-      API.getDbConnection(connection =>
+      SqlUtils.getDbConnection(connection =>
         NewsRepository.downvote(req.body.newsId, req.body.uuid, connection).then(({ statusCode }) => {
-          Logger.log(statusCode, 'POST /news/downvote', { id: req.body.newsId, uuid: req.body.uuid });
           res.status(statusCode);
           res.send();
         })

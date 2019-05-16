@@ -1,5 +1,5 @@
 import { Application, Router } from 'express';
-import { API } from '../../config/api';
+import { SqlUtils } from '../common/sql-utils';
 import { HealthRepository } from '../repositories/health.repository';
 import { RouterFactory } from './router.interface';
 
@@ -15,7 +15,7 @@ export class HealthRouterFactory implements RouterFactory {
   private healthcheck(router: Router): void {
     router.get('/', async (req, res) => {
       try {
-        await API.getDbConnection(connection =>
+        await SqlUtils.getDbConnection(connection =>
           HealthRepository.checkConnection(connection).then(result =>
             res.status(result.success ? 200 : 500).send(result.success ? 'HEALTHY' : 'UNHEALTHY')
           )

@@ -1,6 +1,5 @@
 import { Application, Router } from 'express';
-import { API } from '../../config/api';
-import { Logger } from '../common/logger';
+import { SqlUtils } from '../common/sql-utils';
 import { PlayerRepository } from '../repositories/player.repository';
 import { RouterFactory } from './router.interface';
 
@@ -16,9 +15,8 @@ export class PlayerRouter implements RouterFactory {
 
   private getPlayer(router: Router): void {
     router.get('/:username', (req, res) => {
-      API.getDbConnection(connection =>
+      SqlUtils.getDbConnection(connection =>
         PlayerRepository.getPlayer(req.params.username, connection).then(({ statusCode, player }) => {
-          Logger.log(statusCode, 'GET /player/:username', { username: req.params.username });
           res.status(statusCode);
           res.send(player);
         })
@@ -28,9 +26,8 @@ export class PlayerRouter implements RouterFactory {
 
   private insertPlayer(router: Router): void {
     router.post('/', (req, res) => {
-      API.getDbConnection(connection =>
+      SqlUtils.getDbConnection(connection =>
         PlayerRepository.insertPlayer(req.body, connection).then(({ statusCode }) => {
-          Logger.log(statusCode, 'POST /player', { player: req.body });
           res.status(statusCode);
           res.send();
         })
