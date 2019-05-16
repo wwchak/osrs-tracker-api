@@ -1,9 +1,8 @@
+import { exists, mkdir } from 'fs';
 import { join } from 'path';
-import { mkdir, exists } from 'fs';
 import { Logger } from './logger';
 
-export class FileSystemUtil {
-
+export class FileSystemUtils {
   static createIconsFolderIfMissing(): void {
     const iconsPath = join(__dirname, '/icons/');
 
@@ -11,5 +10,4 @@ export class FileSystemUtil {
       if (!exists) mkdir(iconsPath, () => Logger.log('CREATED ICONS FOLDER'));
     });
   }
-
 }

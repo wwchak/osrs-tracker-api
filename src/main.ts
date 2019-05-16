@@ -1,16 +1,16 @@
 import cluster from 'cluster';
 import os from 'os';
 import { App } from './app/app';
-import { FileSystemUtil } from './app/common/file-system-util';
+import { FileSystemUtils } from './app/common/file-system-utils';
 import { Logger } from './app/common/logger';
 
 if (cluster.isMaster) {
-  FileSystemUtil.createIconsFolderIfMissing();
+  FileSystemUtils.createIconsFolderIfMissing();
   Logger.log('OSRS TRACKER API ACTIVE - FORKING WORKERS');
 
   os.cpus().forEach(() => cluster.fork());
 
-  cluster.on('exit', (worker: cluster.Worker) => {
+  cluster.on('exit', worker => {
     Logger.log(`WORKER ${worker.id} DIED - CREATING NEW WORKER`);
     cluster.fork();
   });

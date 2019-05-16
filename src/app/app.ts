@@ -4,8 +4,9 @@ import compression from 'compression';
 import cors from 'cors';
 import express, { Application } from 'express';
 import helmet from 'helmet';
-import { API } from '../config/api';
+import { config } from '../config/config';
 import { Logger } from './common/logger';
+import { requestLogger } from './middleware/logger.middleware';
 import { HealthRouterFactory } from './routes/health.router-factory';
 import { IconRouter } from './routes/icon.router-factory';
 import { ItemRouter } from './routes/item.router-factory';
@@ -25,8 +26,8 @@ export class App {
   }
 
   start(worker: Worker): void {
-    this._app.listen(API.CONFIG.PORT, () => {
-      Logger.log(`WORKER ${worker.id} CREATED ON PORT ${API.CONFIG.PORT}`);
+    this._app.listen(config.port, () => {
+      Logger.log(`WORKER ${worker.id} CREATED ON PORT ${config.port}`);
       this.setupRouters();
     });
   }
@@ -37,6 +38,7 @@ export class App {
     this._app.use(cors());
     this._app.use(bodyParser.urlencoded({ extended: true }));
     this._app.use(bodyParser.json());
+    this._app.use(requestLogger());
   }
 
   private setupRouters(): void {
