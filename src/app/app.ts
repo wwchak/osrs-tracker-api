@@ -38,7 +38,7 @@ export class App {
     this._app.use(cors());
     this._app.use(bodyParser.urlencoded({ extended: true }));
     this._app.use(bodyParser.json());
-    this._app.use(requestLogger());
+    this._app.use(requestLogger(['/health']));
   }
 
   private setupRouters(): void {
