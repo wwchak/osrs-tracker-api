@@ -6,6 +6,7 @@ const dbCredentials: PoolConfig = JSON.parse(readFileSync('/run/secrets/db-osrs-
 
 export const config: IConfig = {
   port: Number(process.env.PORT) || 8080,
+  portMetrics: Number(process.env.PORT_METRICS) || 8088,
   poolConfig: Object.assign(dbCredentials, {
     ssl: {
       ca: readFileSync('/run/secrets/db-ca.pem'),

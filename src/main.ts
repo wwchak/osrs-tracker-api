@@ -1,8 +1,11 @@
 import cluster from 'cluster';
+import * as express from 'express';
+import { clusterMetrics } from 'express-prom-bundle';
 import os from 'os';
 import { App } from './app/app';
-import { FileSystemUtils } from './app/common/file-system-utils';
 import { Logger } from './app/common/logger';
+import { FileSystemUtils } from './app/common/utils/file-system-utils';
+import { config } from './config/config';
 
 if (cluster.isMaster) {
   FileSystemUtils.createIconsFolderIfMissing();
@@ -10,10 +13,14 @@ if (cluster.isMaster) {
 
   os.cpus().forEach(() => cluster.fork());
 
+  const metricsApp = express();
+  metricsApp.use('/metrics', clusterMetrics());
+  metricsApp.listen(config.portMetrics);
+
   cluster.on('exit', worker => {
     Logger.log(`WORKER ${worker.id} DIED - CREATING NEW WORKER`);
     cluster.fork();
   });
 } else {
-  new App().start(cluster.worker);
+  App.run(cluster.worker);
 }
