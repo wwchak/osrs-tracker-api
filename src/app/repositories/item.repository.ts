@@ -2,8 +2,7 @@ import { PoolConnection } from 'mysql';
 import { Item } from '../data/item';
 
 export class ItemRepository {
-
-  static getItem(itemId: number, connection: PoolConnection): Promise<{ statusCode: number, items?: Item[] }> {
+  static getItem(itemId: number, connection: PoolConnection): Promise<{ statusCode: number; items?: Item[] }> {
     return new Promise(resolve => {
       connection.query('SELECT * FROM Item WHERE id = ?', itemId, (outerError, results: Item[]) => {
         if (outerError) {
@@ -11,7 +10,7 @@ export class ItemRepository {
         } else if (results && results.length > 0) {
           resolve({
             statusCode: 200,
-            items: results
+            items: results,
           });
         } else {
           resolve({ statusCode: 404 });
@@ -20,7 +19,7 @@ export class ItemRepository {
     });
   }
 
-  static getItems(query: string, connection: PoolConnection): Promise<{ statusCode: number, items?: Item[] }> {
+  static getItems(query: string, connection: PoolConnection): Promise<{ statusCode: number; items?: Item[] }> {
     return new Promise(resolve => {
       connection.query('SELECT * FROM Item WHERE name LIKE ?', [`%${query}%`], (outerError, results: Item[]) => {
         if (outerError) {
@@ -33,5 +32,4 @@ export class ItemRepository {
       });
     });
   }
-
 }

@@ -1,6 +1,6 @@
 import { exists, mkdir } from 'fs';
 import { join } from 'path';
-import { Logger } from './logger';
+import { Logger } from '../logger';
 
 export class FileSystemUtils {
   static createIconsFolderIfMissing(): void {

@@ -1,5 +1,5 @@
 import { Application, Router } from 'express';
-import { SqlUtils } from '../common/sql-utils';
+import { SqlUtils } from '../common/utils/sql-utils';
 import { PlayerRepository } from '../repositories/player.repository';
 import { RouterFactory } from './router.interface';
 

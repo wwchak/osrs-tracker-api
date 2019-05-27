@@ -1,8 +1,8 @@
 import cluster from 'cluster';
 import os from 'os';
 import { App } from './app/app';
-import { FileSystemUtils } from './app/common/file-system-utils';
 import { Logger } from './app/common/logger';
+import { FileSystemUtils } from './app/common/utils/file-system-utils';
 
 if (cluster.isMaster) {
   FileSystemUtils.createIconsFolderIfMissing();
@@ -15,5 +15,5 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
-  new App().start(cluster.worker);
+  App.run(cluster.worker);
 }
