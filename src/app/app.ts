@@ -46,7 +46,14 @@ export class App {
     this._app.use(bodyParser.urlencoded({ extended: true }));
     this._app.use(bodyParser.json());
     this._app.use(requestLogger(['/health', '/metrics']));
-    this._app.use(prometheusMetricsMiddleware({ includeMethod: true, includePath: true }));
+    this._app.use(
+      prometheusMetricsMiddleware({
+        autoregister: false,
+        customLabels: { app: 'osrs-tracker-api' },
+        includeMethod: true,
+        includePath: true,
+      })
+    );
   }
 
   private setupRouters(): void {
