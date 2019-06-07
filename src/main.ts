@@ -2,6 +2,7 @@ import cluster from 'cluster';
 import * as express from 'express';
 import { clusterMetrics } from 'express-prom-bundle';
 import os from 'os';
+import { collectDefaultMetrics } from 'prom-client';
 import { App } from './app/app';
 import { Logger } from './app/common/logger';
 import { FileSystemUtils } from './app/common/utils/file-system-utils';
@@ -22,5 +23,7 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
+  collectDefaultMetrics();
+  
   App.run(cluster.worker);
 }
