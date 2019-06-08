@@ -52,6 +52,11 @@ export class App {
         customLabels: { app: 'osrs-tracker-api' },
         includeMethod: true,
         includePath: true,
+        normalizePath: [
+          ['^/player/.*', '/player/#username'],
+          ['^/xp/.*/.*', '/xp/#username/#period'],
+          ['^/xp/[^/]*', '/xp/#username'],
+        ],
       })
     );
   }
