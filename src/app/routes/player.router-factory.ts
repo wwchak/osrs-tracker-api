@@ -26,12 +26,17 @@ export class PlayerRouter implements RouterFactory {
 
   private insertPlayer(router: Router): void {
     router.post('/', (req, res) => {
-      SqlUtils.getDbConnection(connection =>
-        PlayerRepository.insertPlayer(req.body, connection).then(({ statusCode }) => {
+      SqlUtils.getDbConnection(connection => {
+        // TEMP MAPPING FOR NEW FIELD ENUM PlayerStatus
+        if (typeof req.body.deIroned === 'boolean') {
+          req.body.deIroned = Number(req.body.deIroned); // map boolean to number
+        }
+
+        return PlayerRepository.insertPlayer(req.body, connection).then(({ statusCode }) => {
           res.status(statusCode);
           res.send();
-        })
-      );
+        });
+      });
     });
   }
 }

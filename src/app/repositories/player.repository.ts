@@ -1,10 +1,9 @@
-import { PlayerType } from '../data/player-type';
 import { PoolConnection } from 'mysql';
-import { Player, DbPlayer } from '../data/player';
+import { DbPlayer, Player } from '../data/player';
+import { PlayerType } from '../data/player-type';
 
 export class PlayerRepository {
-
-  static getPlayer(username: string, connection: PoolConnection): Promise<{ statusCode: number, player?: Player }> {
+  static getPlayer(username: string, connection: PoolConnection): Promise<{ statusCode: number; player?: Player }> {
     const query = 'SELECT p.*, pt.type FROM Player p JOIN PlayerType pt ON p.playerType = pt.id WHERE username = ?';
     return new Promise(resolve => {
       connection.query(query, [username.toLowerCase()], (outerError, [result]: DbPlayer[]) => {
@@ -19,7 +18,7 @@ export class PlayerRepository {
               deIroned: result.deIroned,
               dead: result.dead,
               lastChecked: result.lastChecked,
-            } as Player
+            } as Player,
           });
         } else {
           resolve({ statusCode: 404 });
@@ -36,7 +35,7 @@ export class PlayerRepository {
     });
   }
 
-  static getPlayers(connection: PoolConnection): Promise<{ statusCode: number, players?: DbPlayer[] }> {
+  static getPlayers(connection: PoolConnection): Promise<{ statusCode: number; players?: DbPlayer[] }> {
     return new Promise(resolve => {
       connection.query('SELECT p.id, p.username FROM Player p', (outerError, results: DbPlayer[]) => {
         if (outerError) {
@@ -50,9 +49,11 @@ export class PlayerRepository {
     });
   }
 
-  static insertPlayer({ username, playerType, deIroned, dead }: Player, connection: PoolConnection): Promise<{ statusCode: number }> {
-    const query =
-      `INSERT INTO Player (username, playerType, deIroned, dead) VALUES (?, ?, ?, ?)
+  static insertPlayer(
+    { username, playerType, deIroned, dead }: Player,
+    connection: PoolConnection
+  ): Promise<{ statusCode: number }> {
+    const query = `INSERT INTO Player (username, playerType, deIroned, dead) VALUES (?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE deIroned = ?, dead = ?, lastChecked = current_timestamp`;
     const params = [username.toLowerCase(), PlayerType[playerType], deIroned, dead, deIroned, dead];
 
